@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Вхід у систему</title>
+</head>
+<body>
+    <h2>Авторизація користувача</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Увійти</button>
+    </form>
+
+    <p>Ще не зареєстровані? <a href="/auth/register/">Створити акаунт</a></p>
+</body>
+</html>
