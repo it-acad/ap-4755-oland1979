@@ -36,10 +36,37 @@
         Available copies: {{ book.count }}
     </p>
 
+    {% if book.count > 0 %}
+
+    <form
+        method="post"
+        action="{% url 'create_order' book.id %}"
+    >
+
+        {% csrf_token %}
+
+        <button type="submit">
+            Order book
+        </button>
+
+    </form>
+
+    {% else %}
+
+    <p>
+        Out of stock
+    </p>
+
+    {% endif %}
+
 </div>
+
+<hr>
 
 {% empty %}
 
-<p>No books found.</p>
+<p>
+    No books found.
+</p>
 
 {% endfor %}
