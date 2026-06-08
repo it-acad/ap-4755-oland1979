@@ -9,6 +9,9 @@ from book.models import Book
 
 
 def orders_list(request):
+    """
+    Show all orders (librarian).
+    """
     orders = Order.objects.all()
 
     return render(
@@ -20,6 +23,9 @@ def orders_list(request):
 
 @login_required
 def my_orders(request):
+    """
+    Show orders of current user.
+    """
     orders = Order.objects.filter(
         user=request.user
     )
@@ -31,9 +37,26 @@ def my_orders(request):
     )
 
 
+def user_orders(request, user_id):
+    """
+    Show all books provided to a specific user (by id).
+    """
+    orders = Order.objects.filter(
+        user_id=user_id
+    )
+
+    return render(
+        request,
+        "order/list.html",
+        {"orders": orders}
+    )
+
+
 @login_required
 def create_order(request, book_id):
-
+    """
+    Create new order.
+    """
     if request.method == "POST":
 
         book = Book.get_by_id(book_id)
@@ -59,11 +82,12 @@ def create_order(request, book_id):
 
 @login_required
 def close_order(request, id):
-
+    """
+    Close order and return book.
+    """
     order = Order.get_by_id(id)
 
     if order:
-
         order.update(
             end_at=timezone.now()
         )
