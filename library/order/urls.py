@@ -15,6 +15,12 @@ urlpatterns = [
     ),
 
     path(
+        "user/<int:user_id>/",
+        views.user_orders,
+        name="user_orders"
+    ),
+
+    path(
         "create/<int:book_id>/",
         views.create_order,
         name="create_order"
