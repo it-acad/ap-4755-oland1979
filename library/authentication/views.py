@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from authentication.models import CustomUser
 
 def register_view(request):
@@ -24,7 +25,7 @@ def register_view(request):
                 role=int(role)
             )
             login(request, user)
-            return redirect('users_list')
+            return redirect('dashboard')
 
     return render(request, 'authentication/register.html', {'error': error})
 
@@ -35,12 +36,11 @@ def login_view(request):
         email_input = request.POST.get('email')
         password_input = request.POST.get('password')
 
-
         user = authenticate(request, username=email_input, password=password_input)
 
         if user is not None:
             login(request, user)
-            return redirect('users_list')
+            return redirect('dashboard')
         else:
             error = "Невірний Email або пароль."
 
@@ -50,3 +50,9 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url='login')
+def dashboard_view(request):
+
+    return render(request, 'authentication/dashboard.html')

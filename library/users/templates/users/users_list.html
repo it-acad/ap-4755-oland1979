@@ -2,28 +2,48 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Деталі користувача</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 50px; background-color: #f9f9f9; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 500px; }
-        p { font-size: 16px; line-height: 1.6; }
-        .back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
-    </style>
+    <title>Панель адміністратора: Список користувачів</title>
 </head>
-<body>
+<body style="font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5;">
 
-<div class="card">
-    <h2>Профіль користувача №{{ target_user.id }}</h2>
-    <hr>
-    <p><strong>Email:</strong> {{ target_user.email }}</p>
-    <p><strong>Прізвище:</strong> {{ target_user.last_name|default:"—" }}</p>
-    <p><strong>Ім'я:</strong> {{ target_user.first_name|default:"—" }}</p>
-    <p><strong>По батькові:</strong> {{ target_user.middle_name|default:"—" }}</p>
-    <p><strong>Роль:</strong> {% if target_user.role == 1 %}Бібліотекар (Адмін){% else %}Читач (Візитер){% endif %}</p>
-    <p><strong>Статус аккаунту:</strong> {% if target_user.is_active %}Активний{% else %}Неактивний{% endif %}</p>
+    <div style="max-width: 800px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
 
-    <a href="{% url 'users_list' %}" class="back-link">← Назад до списку</a>
-</div>
+        <h2 style="color: #0050b3; text-align: center;">Список користувачів</h2>
 
+        <div style="text-align: right; margin-bottom: 20px;">
+            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="background-color: #ff4d4f; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                    Вийти з акаунта
+                </button>
+            </form>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background-color: #e6f7ff;">
+                    <th style="padding: 10px; border: 1px solid #ddd;">Email</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">Роль</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">Дія</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">{{ u.email }}</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">{{ u.role }}</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">
+                        <a href="{% url 'user_detail' u.id %}">Деталі</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 20px;">Користувачів ще немає.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 </body>
 </html>
