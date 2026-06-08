@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
@@ -8,7 +9,6 @@ from book.models import Book
 
 
 def orders_list(request):
-
     orders = Order.objects.all()
 
     return render(
@@ -18,8 +18,8 @@ def orders_list(request):
     )
 
 
+@login_required
 def my_orders(request):
-
     orders = Order.objects.filter(
         user=request.user
     )
@@ -31,11 +31,15 @@ def my_orders(request):
     )
 
 
+@login_required
 def create_order(request, book_id):
 
     if request.method == "POST":
 
         book = Book.get_by_id(book_id)
+
+        if not book:
+            return redirect("books_list")
 
         planned_date = (
             timezone.now() +
@@ -53,6 +57,7 @@ def create_order(request, book_id):
     return redirect("books_list")
 
 
+@login_required
 def close_order(request, id):
 
     order = Order.get_by_id(id)
