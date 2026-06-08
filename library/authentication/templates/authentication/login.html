@@ -7,9 +7,23 @@
 <body>
     <h2>Авторизація користувача</h2>
 
+    {% if error %}
+        <p style="color: red; font-weight: bold;">{{ error }}</p>
+    {% endif %}
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <p>
+            <label for="email">Логін або Email:</label><br>
+            <input type="text" id="email" name="email" required placeholder="Введіть логін або email">
+        </p>
+
+        <p>
+            <label for="password">Пароль:</label><br>
+            <input type="password" id="password" name="password" required placeholder="Введіть пароль">
+        </p>
+
         <button type="submit">Увійти</button>
     </form>
 

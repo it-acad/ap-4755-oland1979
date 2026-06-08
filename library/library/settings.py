@@ -166,3 +166,4 @@ LOGIN_REDIRECT_URL = '/admin/'
 
 LOGIN_URL = '/auth/login/'
 
+AUTH_USER_MODEL = 'authentication.CustomUser'
