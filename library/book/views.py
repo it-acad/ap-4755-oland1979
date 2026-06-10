@@ -1,11 +1,11 @@
 from django.shortcuts import render
+from django.db.models import Q
 
 from .models import Book
 from order.models import Order
 
 
 def books_list(request):
-
     books = Book.objects.all()
 
     title = request.GET.get("title")
@@ -17,9 +17,18 @@ def books_list(request):
         )
 
     if author:
-        books = books.filter(
-            authors__name__icontains=author
-        )
+
+        words = author.split()
+        author_filter = Q()
+
+
+        for word in words:
+            author_filter &= (Q(authors__name__icontains=word) | Q(authors__surname__icontains=word))
+
+
+        books = books.filter(author_filter).distinct()
+
+
 
     return render(
         request,
@@ -29,7 +38,6 @@ def books_list(request):
 
 
 def book_detail(request, id):
-
     book = Book.get_by_id(id)
 
     return render(
@@ -40,7 +48,6 @@ def book_detail(request, id):
 
 
 def user_books(request, user_id):
-
     orders = Order.objects.filter(
         user_id=user_id,
         end_at=None

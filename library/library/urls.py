@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -8,4 +9,7 @@ urlpatterns = [
     path('authors/', include('author.urls')),
     path('books/', include('book.urls')),
     path('orders/', include('order.urls')),
+
+
+    path('', RedirectView.as_view(url='books/', permanent=False)),
 ]
