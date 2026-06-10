@@ -1,9 +1,13 @@
 from django.urls import path
-from .views import register_view, login_view, logout_view, dashboard_view
+from django.views.generic import RedirectView
+from . import views
 
 urlpatterns = [
-    path('register/', register_view, name='register'),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('dashboard/', dashboard_view, name='dashboard'), # Ось цей рядок обов'язковий!
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
+
+
+    path('', RedirectView.as_view(url='login/', permanent=False)),
 ]
